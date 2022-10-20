@@ -86,8 +86,7 @@ module.exports = class SpellView extends CocoView
     @createACE()
     @createACEShortcuts()
     @hookACECustomBehavior()
-    unless utils.useWebsocket
-      @fillACE()
+    @fillACE()
     @createOnCodeChangeHandlers()
     @lockDefaultCode()
     _.defer @onAllLoaded  # Needs to happen after the code generating this view is complete
@@ -135,13 +134,13 @@ module.exports = class SpellView extends CocoView
     @initAutocomplete liveCompletion
 
 
-    if utils.useWebsocket
-      # TODO: do auth checking server side
-      @yjsProvider = aceUtils.setupCRDT("#{@session.id}", me.broadName(), @spell.source, @ace)
-      # @yjsProvider.connections = 1
-      # @yjsProvider.awareness.on('change', () =>
-      #   @yjsProvider.connections = @yjsProvider.awareness.getStates().size
-      # )
+    # if utils.useWebsocket
+    #   TODO: do auth checking server side
+    #   @yjsProvider = aceUtils.setupCRDT("#{@session.id}", me.broadName(), @spell.source, @ace)
+    #   @yjsProvider.connections = 1
+    #   @yjsProvider.awareness.on('change', () =>
+    #     @yjsProvider.connections = @yjsProvider.awareness.getStates().size
+    #   )
 
     return if @session.get('creator') isnt me.id or @session.fake
     # Create a Spade to 'dig' into Ace.

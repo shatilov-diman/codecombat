@@ -50,6 +50,8 @@ module.exports = class LevelBus extends Bus
         @session.set({timesAutocompleteUsed})
         @changedSessionProperties.timesAutocompleteUsed = true
     )
+    if utils.useWebsocket
+      @wsBus = globalVar.application.wsBus
 
   init: ->
     super()
@@ -295,6 +297,13 @@ module.exports = class LevelBus extends Bus
       console.error('Unable to parse concepts from this AST.')
       console.error(e)
 
+  subscribeTeacher: (teacherId) ->
+    return unless @wsBus
+    topic = "user-#{teacherId.toString()}"
+    @wsBus.ws.subscribe(topic)
+    me.fetchOnlineFriends([teacherId.toString()]).then((onlineTeacher) =>
+      @wsBus.updateOnlineFriends(onlineTeacher)
+    )
 
   destroy: ->
     clearInterval(@timerIntervalID)

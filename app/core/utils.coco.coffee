@@ -2,7 +2,7 @@ slugify = require('underscore.string').slugify # TODO: why _.string on client an
 
 isCodeCombat = true
 isOzaria = false
-useWebsocket = false
+useWebsocket = true
 
 getAnonymizedName = (shouldAnonymize, session) ->
   if shouldAnonymize and me.get('_id').toString() != session.get('creator')
