@@ -213,3 +213,5 @@ module.exports =
         type: c.shortString()
         score: {type: 'number'}
         date: c.date()
+
+  'level:toggle-solution': c.object {}

@@ -20,6 +20,10 @@ LZString = require 'lz-string'
 utils = require 'core/utils'
 Aether = require 'lib/aether/aether'
 globalVar = require 'core/globalVar'
+fetchJson = require 'core/api/fetch-json'
+store = require 'core/store'
+AceDiff = require 'ace-diff'
+require('app/styles/common/ace-diff.sass')
 
 module.exports = class SpellView extends CocoView
   id: 'spell-view'
@@ -64,6 +68,7 @@ module.exports = class SpellView extends CocoView
     'level:show-victory': 'onShowVictory'
     'web-dev:error': 'onWebDevError'
     'websocket:asking-help': 'onAskingHelp'
+    'level:toggle-solution': 'onToggleSolution'
 
   events:
     'mouseout': 'onMouseOut'
@@ -93,6 +98,8 @@ module.exports = class SpellView extends CocoView
     @hookACECustomBehavior()
     unless @teaching
       @fillACE()
+    if @teaching  # Yuqiang: these 2 conditions can use same if/else but they are doing different things so i keep the 2 conditions exist at the same time
+      @fillACESolution()
     @createOnCodeChangeHandlers()
     @lockDefaultCode()
     _.defer @onAllLoaded  # Needs to happen after the code generating this view is complete
@@ -426,6 +433,41 @@ module.exports = class SpellView extends CocoView
     @ace.setValue @spell.source
     @aceSession.setUndoManager(new UndoManager())
     @ace.clearSelection()
+
+  fillACESolution: ->
+    return unless @teaching
+    aceSolution = ace.edit document.querySelector('.ace-solution')
+    aceSSession = aceSolution.getSession()
+    aceSSession.setMode aceUtils.aceEditModes[@spell.language]
+    aceSolution.setTheme 'ace/theme/textmate'
+    solution = store.getters['game/getSolutionSrc'](@spell.language)
+    aceSolution.setValue solution
+    aceSolution.clearSelection()
+
+    @aceDiff = new AceDiff({
+      element: '#solution-view'
+      showDiffs: false,
+      showConnectors: false,
+      mode: aceUtils.aceEditModes[@spell.language],
+      left: {
+        ace: aceSolution,
+        editable: false,
+        copyLinkEnabled: false
+      },
+      right: {
+        ace: @ace
+      }
+    })
+
+  onToggleSolution: ->
+    return unless @teaching and @aceDiff
+    solution = document.querySelector('#solution-area')
+    if solution.classList.contains('display')
+      solution.classList.remove('display')
+      @aceDiff.setOptions({showDiffs: false})
+    else
+      solution.classList.add('display')
+      @aceDiff.setOptions({showDiffs: true})
 
   lockDefaultCode: (force=false) ->
     # TODO: Lock default indent for an empty line?
@@ -1495,12 +1537,13 @@ module.exports = class SpellView extends CocoView
     if utils.useWebsocket
       msg = e.msg
       msg.info.url += "?course=#{@courseID}&codeLanguage=#{@session.get('codeLanguage')}&session=#{@session.id}&teaching=true"
-      # TODO: do auth checking server side
-      @yjsProvider = aceUtils.setupCRDT("#{@session.id}", me.broadName(), @getSource(), @ace, () => globalVar.application.wsBus.ws.sendJSON(msg))
-      @yjsProvider.connections = 1
-      @yjsProvider.awareness.on('change', () =>
-        @yjsProvider.connections = @yjsProvider.awareness.getStates().size
-        console.log('provider get awareness update:', @yjsProvider.connections)
+      fetchJson("/db/level.session/#{@session.id}/permissions/ws/#{msg.to}", { method: 'PUT' }).then(() =>
+        @yjsProvider = aceUtils.setupCRDT("#{@session.id}", me.broadName(), @getSource(), @ace, () => globalVar.application.wsBus.ws.sendJSON(msg))
+        @yjsProvider.connections = 1
+        @yjsProvider.awareness.on('change', () =>
+          @yjsProvider.connections = @yjsProvider.awareness.getStates().size
+          console.log('provider get awareness update:', @yjsProvider.connections)
+        )
       )
 
   destroy: ->
