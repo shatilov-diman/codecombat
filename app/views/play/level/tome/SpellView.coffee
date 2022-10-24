@@ -23,7 +23,7 @@ globalVar = require 'core/globalVar'
 fetchJson = require 'core/api/fetch-json'
 store = require 'core/store'
 AceDiff = require 'ace-diff'
-require('app/styles/common/ace-diff.sass')
+require('app/styles/play/level/tome/ace-diff-spell.sass')
 
 module.exports = class SpellView extends CocoView
   id: 'spell-view'
@@ -447,7 +447,7 @@ module.exports = class SpellView extends CocoView
     @aceDiff = new AceDiff({
       element: '#solution-view'
       showDiffs: false,
-      showConnectors: false,
+      showConnectors: true,
       mode: aceUtils.aceEditModes[@spell.language],
       left: {
         ace: aceSolution,
@@ -455,7 +455,8 @@ module.exports = class SpellView extends CocoView
         copyLinkEnabled: false
       },
       right: {
-        ace: @ace
+        ace: @ace,
+        copyLinkEnabled: false
       }
     })
 
@@ -772,6 +773,7 @@ module.exports = class SpellView extends CocoView
 
       codeAreaBottom = if spellPaletteHeight then windowHeight - (newTop + spellPaletteHeight + 20) else 0
       $('#code-area').css('bottom', codeAreaBottom)
+      $('#solution-area').css('bottom', codeAreaBottom)
       #console.log { lineHeight, spellTopBarHeight, spellPaletteHeight, spellPaletteAllowedHeight, windowHeight, topOffset, gameHeight, minHeight, maxHeight, linesAtMinHeight, linesAtMaxHeight, lines, newTop, screenLineCount }
 
     if @firstEntryToScrollLine? and @ace?.renderer?.$cursorLayer?.config

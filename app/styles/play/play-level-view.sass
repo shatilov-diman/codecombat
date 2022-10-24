@@ -175,17 +175,23 @@ body.is-playing
   #solution-area
     right: 43.5%
     right: $code-area-width
-    transform: translateY(-100%)
+    transform: translate(54px, -100%)
     transition: transform 1s
+    padding-top: 87px
+    z-index: 3
+    box-shadow: none
+    background: transparent
 
     &.display
-      transform: translateY(0)
+      transform: translate(54px, 0)
 
     #solution-view
-      margin-top: 20%
-      height: 80%
+      margin-top: 10px
+      height: 100%
       position: relative
       padding-top: 20px
+      display: flex
+      z-index: 5
 
       span.code-background
         border: 1px solid transparent
@@ -196,6 +202,19 @@ body.is-playing
         left: 0px
         height: 100%
         right: -10px
+        z-index: -1
+
+      .solution-label
+        position: absolute
+        top: 10px
+        left: 26px
+        z-index: 4
+        font-family: "Open Sans Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif
+        font-size: 14px
+        padding: 0px 10px
+        color: #6E654B
+        font-weight: bold
+        text-transform: uppercase
 
       @include ace
 
