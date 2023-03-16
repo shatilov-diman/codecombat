@@ -15,6 +15,10 @@ export default function getVueRouter () {
           component: () => import(/* webpackChunkName: "AnnouncementView" */ 'app/views/announcement/AnnouncementView')
         },
         {
+          path: '/acr',
+          component: () => import(/* webpackChunkName: "acr" */ 'app/views/acr/ACRView.vue')
+        },
+        {
           path: '/diversity-equity-and-inclusion',
           component: () => import(/* webpackChunkName: "dei" */ 'app/views/dei/DEIView.vue')
         },

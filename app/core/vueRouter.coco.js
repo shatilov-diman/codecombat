@@ -15,6 +15,10 @@ export default function getVueRouter () {
           component: () => import(/* webpackChunkName: "AnnouncementView" */ 'app/views/announcement/AnnouncementView')
         },
         {
+          path: '/acr',
+          component: () => import(/* webpackChunkName: "acr" */ 'app/views/acr/ACRView.vue')
+        },
+        {
           path: '/parents',
           component: () => import(/* webpackChunkName: "ParentsView" */ 'app/views/landing-pages/parents/PageParents'),
           props: (route) => ({ showPremium: true, type: route.query.type })

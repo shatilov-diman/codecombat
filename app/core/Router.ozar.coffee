@@ -64,6 +64,8 @@ module.exports = class CocoRouter extends Backbone.Router
 
     'licensor': go('LicensorView')
 
+    'acr': go('core/SingletonAppVueComponentView')
+
     'admin': go('admin/MainAdminView')
     'admin/clas': go('admin/CLAsView')
     'admin/classroom-content': go('admin/AdminClassroomContentView')
