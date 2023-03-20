@@ -2563,6 +2563,8 @@ module.exports = nativeDescription: "English", englishDescription: "English", tr
     license_stats: "License Stats"
     redeemers: "Active Students"
     removed_redeemers: "Inactive Students"
+    edit_student_access_title: "Edit Student Access to Levels"
+    edit_student_access_subtitle: "You have selected __levels__ levels for __students__ students."
 
   teacher_licenses:
     active_licenses: "Active Licenses"
@@ -3972,7 +3974,20 @@ module.exports = nativeDescription: "English", englishDescription: "English", tr
   teacher_dashboard:
     lock: 'Lock'
     unlock: 'Unlock'
+    lock_until_date: 'Lock until date'
+    skip: 'Skip'
+    unskip: 'Unskip'
+    make_optional: 'Make optional'
+    remove_optional: 'Remove Optional'
+    until_date: 'until __date__'
     unassign: 'Unassign'
+    locked: 'Locked'
+    locked_by_previous: 'Locked by previous level'
+    locked_with_timeframe: 'Locked'
+    skipped: 'Skipped'
+    optional: 'Optional'
+    assigned: 'Assigned'
+    unlocked: 'Unlocked'
     choose_course: 'Click to Select from Dropdown'
     teacher_locked_message: 'Your teacher has locked the next level'
     plan_your_class_title: 'Plan your first class by'
@@ -4058,6 +4073,7 @@ module.exports = nativeDescription: "English", englishDescription: "English", tr
     share: 'Share'
     add: 'Add'
     note: 'Note'
+    lock_or_skip_levels: 'Lock or Skip Levels'
 
   outcomes:
     outcomes_report: "Outcomes Report"
